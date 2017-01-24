@@ -1,8 +1,9 @@
 libpsl (0.17.0-3) unstable; urgency=medium
 
-  * Fix wrong dependency for 0.17.0-2
+  * runtime dependency on libidn2-dev should have been on libidn2-0
+    (Closes: #852418)
 
- -- Tim Rühsen <tim.ruehsen@gmx.de>  Tue, 24 Jan 2017 13:38:29 +0100
+ -- Daniel Kahn Gillmor <dkg@fifthhorseman.net>  Tue, 24 Jan 2017 09:36:45 -0500
 
 libpsl (0.17.0-2) unstable; urgency=medium
 
