@@ -658,7 +658,7 @@ static _psl_idna_t *_psl_idna_open(void)
 {
 #if defined(WITH_LIBICU)
 	UErrorCode status = 0;
-	return (void *)uidna_openUTS46(UIDNA_USE_STD3_RULES, &status);
+	return (void *)uidna_openUTS46(UIDNA_USE_STD3_RULES | UIDNA_NONTRANSITIONAL_TO_ASCII, &status);
 #endif
 	return NULL;
 }
@@ -701,6 +701,21 @@ static int _psl_idna_toASCII(_psl_idna_t *idna _UNUSED, const char *utf8, char *
 			fprintf(stderr, "Failed to convert UTF-8 to UTF-16 (status %d)\n", status); */
 	}
 #elif defined(WITH_LIBIDN2)
+#if IDN2_VERSION_NUMBER >= 0x00140000
+	int rc;
+
+	/* IDN2_TRANSITIONAL automatically converts to lowercase
+	 * IDN2_NFC_INPUT converts to NFC before toASCII conversion
+	 * Since IDN2_TRANSITIONAL implicitly does NFC conversion, we don't need
+	 * the additional IDN2_NFC_INPUT. But just for the unlikely case that the linked
+	 * library is not matching the headers when building and it doesn't support TR46,
+	 * we provide IDN2_NFC_INPUT. */
+
+	if ((rc = idn2_lookup_u8((uint8_t *)utf8, (uint8_t **)ascii, IDN2_NFC_INPUT | IDN2_NONTRANSITIONAL)) == IDN2_OK)
+		ret = 0;
+	/* else
+		fprintf(stderr, "toASCII(%s) failed (%d): %s\n", lower, rc, idn2_strerror(rc)); */
+#else
 	int rc;
 	uint8_t *lower;
 	size_t len = u8_strlen((uint8_t *)utf8) + 1;
@@ -717,6 +732,7 @@ static int _psl_idna_toASCII(_psl_idna_t *idna _UNUSED, const char *utf8, char *
 		fprintf(stderr, "toASCII(%s) failed (%d): %s\n", lower, rc, idn2_strerror(rc)); */
 
 	free(lower);
+#endif
 #elif defined(WITH_LIBIDN)
 	int rc;
 
