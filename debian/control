@@ -24,7 +24,6 @@ Package: libpsl-dev
 Section: libdevel
 Architecture: any
 Depends:
- libidn2-0-dev (>=0.16),
  libpsl5 (= ${binary:Version}),
  ${misc:Depends},
 Description: Library for Public Suffix List (development headers)
@@ -41,6 +40,7 @@ Description: Library for Public Suffix List (development headers)
 Package: libpsl5
 Architecture: any
 Depends:
+ libidn2-0 (>= 0.16),
  ${misc:Depends},
  ${shlibs:Depends},
 Recommends:
