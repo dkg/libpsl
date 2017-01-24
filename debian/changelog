@@ -1,3 +1,14 @@
+libpsl (0.17.0-1) unstable; urgency=medium
+
+  [ Tim Rühsen ]
+  * new upstream release
+
+  [ Daniel Kahn Gillmor ]
+  * Use alioth for debian packaging
+  * Move from libicu to libidn2
+
+ -- Daniel Kahn Gillmor <dkg@fifthhorseman.net>  Tue, 24 Jan 2017 00:00:56 -0500
+
 libpsl (0.16.1-1) unstable; urgency=medium
 
   * new upstream release
