@@ -1,3 +1,9 @@
+libpsl (0.17.0-4) unstable; urgency=medium
+
+  * prefer dafsa to plain-text (Closes: #855711)
+
+ -- Daniel Kahn Gillmor <dkg@fifthhorseman.net>  Tue, 21 Feb 2017 13:03:44 -0500
+
 libpsl (0.17.0-3) unstable; urgency=medium
 
   * runtime dependency on libidn2-dev should have been on libidn2-0
