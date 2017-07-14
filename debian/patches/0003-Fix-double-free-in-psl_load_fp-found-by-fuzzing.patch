@@ -1,0 +1,21 @@
+From: =?utf-8?q?Tim_R=C3=BChsen?= <tim.ruehsen@gmx.de>
+Date: Fri, 9 Jun 2017 22:53:19 +0200
+Subject: Fix double free in psl_load_fp(), found by fuzzing
+
+---
+ src/psl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/psl.c b/src/psl.c
+index 4e6aa14..16c7e27 100644
+--- a/src/psl.c
++++ b/src/psl.c
+@@ -1161,6 +1161,8 @@ psl_ctx_t *psl_load_fp(FILE *fp)
+ 		/* release unused memory */
+ 		if ((m = realloc(psl->dafsa, len)))
+ 			psl->dafsa = m;
++		else if (!len)
++			psl->dafsa = NULL; // realloc() just free'd psl->dafsa
+ 
+ 		psl->dafsa_size = len;
+ 		psl->utf8 = !!GetUtfMode(psl->dafsa, len);

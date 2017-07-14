@@ -1,0 +1,34 @@
+From: =?utf-8?q?Tim_R=C3=BChsen?= <tim.ruehsen@gmx.de>
+Date: Sun, 9 Jul 2017 20:21:55 +0200
+Subject: Fix uninitialised value created by stack allocation
+
+Using valgrind testing the fuzz corpora revealed a missing
+check in _add_punycode_if_needed() which lead to a
+"Uninitialised value was created by a stack allocation".
+
+Thanks to OSS-fuzz for the corpora, thanks valgrind to find this
+issue (asan and ubsan didn't find it).
+---
+ src/psl.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/src/psl.c b/src/psl.c
+index 0326cc2..169d5ba 100644
+--- a/src/psl.c
++++ b/src/psl.c
+@@ -772,10 +772,11 @@ static void _add_punycode_if_needed(_psl_idna_t *idna, _psl_vector_t *v, _psl_en
+ 			_psl_entry_t suffix, *suffixp;
+ 
+ 			/* fprintf(stderr, "toASCII '%s' -> '%s'\n", e->label_buf, lookupname); */
+-			_suffix_init(&suffix, lookupname, strlen(lookupname));
+-			suffix.flags = e->flags;
+-			if ((suffixp = _vector_get(v, _vector_add(v, &suffix))))
+-				suffixp->label = suffixp->label_buf; /* set label to changed address */
++			if (_suffix_init(&suffix, lookupname, strlen(lookupname)) == 0) {
++				suffix.flags = e->flags;
++				if ((suffixp = _vector_get(v, _vector_add(v, &suffix))))
++					suffixp->label = suffixp->label_buf; /* set label to changed address */
++			}
+ 		} /* else ignore */
+ 
+ 		free(lookupname);

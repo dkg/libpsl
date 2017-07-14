@@ -1,2 +1,7 @@
 0001-remove-git-submodules.patch
 0002-Fix-order-of-files-in-psl_latest.patch
+0003-Fix-double-free-in-psl_load_fp-found-by-fuzzing.patch
+0004-Fix-memleak-in-_psl_is_public_suffix-found-by-fuzzin.patch
+0005-Fix-memory-overflow-in-LIBICU-code-of-psl_str_to_utf.patch
+0006-Fix-uninitialised-value-created-by-stack-allocation.patch
+0007-Fix-oss-fuzz-issue-2600-buffer-overflow-in-libicu-co.patch
