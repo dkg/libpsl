@@ -1,3 +1,9 @@
+libpsl (0.17.0-5) unstable; urgency=medium
+
+  * fix bugs found upstream by fuzzing.
+
+ -- Daniel Kahn Gillmor <dkg@fifthhorseman.net>  Fri, 14 Jul 2017 21:35:43 +0200
+
 libpsl (0.17.0-4) unstable; urgency=medium
 
   * prefer dafsa to plain-text (Closes: #855711)
